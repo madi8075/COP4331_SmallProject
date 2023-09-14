@@ -51,7 +51,6 @@
     /*background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8);*/
     animation: glowing 10s linear infinite;
     background-size: 400%;
-
     /*background: rgba(127, 17, 224, 0.2);*/
     padding: 5px;
 }
@@ -84,7 +83,7 @@
     border-collapse:collapse;
     margin: auto;
     min-width: 200px;
-    border: 4px inset purple;
+    border: 5px inset purple;
     border-radius: 10px;
     background-color: #11002b;
     text-align: center;
@@ -93,14 +92,15 @@
 
 th {
     font-family: Neuropol;
-    text-decoration: #2b0991 wavy underline 3px;
+    text-decoration: purple wavy underline 3px;
+    /*#2b0991*/
     font-size: 1.9vw;
     padding-bottom: 15px;
 }
 
 td {
     font-family: Malvie;
-    font-size: 1.5vw;
+    font-size: 2vw;
     padding-bottom: 8px;
 }
 
@@ -190,4 +190,29 @@ td {
     0% { background-position: 0 0; }
     50% { background-position: 400% 0; }
     100% { background-position: 0 0; }
+}
+
+.astronaut{
+position:absolute;
+width: 100px;
+height: 80px;
+top: 0;
+left: 15%;
+align-self: flex-start;
+}
+
+.floating { 
+    animation-name: floating;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+ 
+@keyframes floating {
+    0% { transform: translate(10px,  -8px); }
+    50%  { transform: translate(-10px, 8px); }
+    100%   { transform: translate(10px, -8px); }
+    0% { background-position: 0 0; }
+    50% { background-position: 200% 0; }
+    100% { background-position: 0 0; }  
 }
