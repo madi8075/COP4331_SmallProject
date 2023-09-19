@@ -1,0 +1,22 @@
+# Create Users Table, and Contacts Table for Local Testing w/ StarfinderDB
+
+CREATE TABLE `StarfinderDB`.`Users` ( `ID` INT NOT NULL AUTO_INCREMENT , `DateCreated` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `DateLastLoggedIn` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `FirstName` VARCHAR(50) NOT NULL DEFAULT '' , `LastName` VARCHAR(50) NOT NULL DEFAULT '' , `Login` VARCHAR(50) NOT NULL DEFAULT '' , `Password` VARCHAR(255) NOT NULL DEFAULT '' , PRIMARY KEY (`ID`)) ENGINE = InnoDB;
+
+CREATE TABLE `StarfinderDB`.`Contacts` ( `ID` INT NOT NULL AUTO_INCREMENT , `FirstName` VARCHAR(50) NOT NULL DEFAULT '' ,`LastName` VARCHAR(50) NOT NULL DEFAULT '' ,`Email` VARCHAR(126) NOT NULL DEFAULT '' ,`Phone` VARCHAR(60) NOT NULL DEFAULT '', `UserID` INT NOT NULL DEFAULT '0' ,`DateCreated` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`ID`)) ENGINE = InnoDB;
+
+insert into Users (FirstName,LastName,Login,Password) VALUES ('Homer','Simpson','HomerS','donuts');
+insert into Users (FirstName,LastName,Login,Password) VALUES ('Bart','Simpson','BartS','cowabunga');
+insert into Users (FirstName,LastName,Login,Password) VALUES ('Sam','Hill','SamH','cowboy');
+insert into Users (FirstName,LastName,Login,Password) VALUES ('Toto','DaCoolest','taliaWasHere','111');
+insert into Users (FirstName,LastName,Login,Password) VALUES ('DumplingLVR','IDC','dumplingH8R','yeh');
+
+insert into Contacts (FirstName,LastName,Email,Phone,UserID) VALUES ('Barney','Bobberton','bibo@bibobobo.bo','123',1);
+insert into Contacts (FirstName,LastName,Email,Phone,UserID) VALUES ('Elmo','Elmerton','elmo@iscool.com','7777',1);
+insert into Contacts (FirstName,LastName,Email,Phone,UserID) VALUES ('Boop','TheFirst','boop1@boops.com','9876',1);
+insert into Contacts (FirstName,LastName,Email,Phone,UserID) VALUES ('Grayson','IsReal','grayson@isReal.com','333333',1);
+insert into Contacts (FirstName,LastName,Email,Phone,UserID) VALUES ('Maggie','Maggots','maggotsRus@maggot.com','22222',1);
+
+
+insert into Contacts (FirstName,LastName,Email,Phone,UserID) VALUES ('Bingbong','BongBing','tooMuchTyping@imSad.tr','1234',3);
+insert into Contacts (FirstName,LastName,Email,Phone,UserID) VALUES ('WhyDoIExist','idk','IfYoureReadingThis@helpme.pls','3456',3);
+insert into Contacts (FirstName,LastName,Email,Phone,UserID) VALUES ('Boop','TheSecond','boop2@boops.com','12345987',3);
