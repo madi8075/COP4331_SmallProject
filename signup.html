@@ -1,0 +1,41 @@
+<!--
+Note: This was created just to test out the login.php code and will have to be fixed
+TODO: fancy frontend stuff :) <3
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Signup or Login</title>
+    <script type="text/javascript" src="js/script.js"></script>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+</head>
+
+<body>
+
+    <!-- Note: signup backend is currently not done/working-->
+    <h1>Signup</h1>
+    <form action="API/signup.php" method="post">
+        <input id="firstName" type="text" name="firstNname" placeholder="First Name">
+        <input id="lastName" type="text" name="lastName" placeholder="Last Name">
+        <input id="username" type="text" name="username" placeholder="Username">
+        <input id="email" type="text" name="email" placeholder="E-mail">
+        <input id="password" type="password" name="password" placeholder="Password">
+        <!-- TODO: consider adding password confirmation-->
+        <br>
+        <button type="submit" onclick="doSignup()" name="submit">Sign up</button>
+        <span class="text" id="signupResult"></span>
+    </form>
+
+    <h1>Login</h1>
+    <form action="API/login.php" method="post">
+        <input id="loginName" type="text" name="userID" placeholder="Username">
+        <input id="loginPassword" type="password" name="password" placeholder="Password">
+        <br>
+        <button type="button" onclick="doLogin()" name="submit">Login</button>
+        <span class="text" id="loginResult"></span>
+    </form>
+
+</body>
+</html>
