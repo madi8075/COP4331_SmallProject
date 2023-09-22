@@ -1,5 +1,7 @@
 <?php
-
+/*
+TODO: consider using a User object instead of just passing around the json 
+*/
     $inData = getRequestInfo();
 
     $userID = 0;
@@ -38,7 +40,7 @@
 		echo $obj;
 	}
 	
-	//TODO: return error status code if user not found
+	//TODO: change this so that we return error status code if user not found 401
 	function returnWithError( $err ){
 		$retValue = '{"id":0,"firstName":"","lastName":"","error":"' . $err . '"}';
 		sendResultInfoAsJson( $retValue );

@@ -1,6 +1,5 @@
 /*
-TODO: we need to implement more functions like our CRUD operations && hashing
-we also need to implement security checks in general
+TODO: we need to finish our CRUD operations && implement hashing our passwords
 */
 const urlBase = 'http://localhost/API';
 const extension = 'php';
@@ -64,6 +63,7 @@ function doLogin(){
 }
 
 //TODO: fix doSignup()
+/*
 function doSignup(){
 	let signupFirstName = document.getElementById("firstName").value;
 	let signupLastName = document.getElementById("lastName").value;
@@ -72,7 +72,7 @@ function doSignup(){
 	let password = document.getElementById("password").value;
 	//TODO: here would be where we hash the password
 
-	//NOTE: this block of code is temporary while we build
+	//NOTE: this block of code is temporary while we test out & nuild the backend
 	if (!signupFirstName || !signupLastName || !username || !password){
 	  document.getElementById("signupResult").innerHTML ="Must fill all fields";
 	  return;
@@ -108,7 +108,6 @@ function doSignup(){
 
 				console.log("Successful Signup");
 				saveCookie();
-
 				// consider when user signsup they auto log in
 			}
 		};
@@ -116,7 +115,7 @@ function doSignup(){
 	} catch (err){
 		document.getElementById("signupResult").innerHTML = err.message;
 	}
-}
+}*/
 
 function saveCookie(){
 	let minutes = 20;
@@ -155,7 +154,7 @@ function doLogout(){
 	userId = 0;
 	firstName = "";
 	lastName = "";
-	document.cookie = "firstName= ; Expires = Thu, 01 Jan 2025 00:00:00 GMT";
+	document.cookie = "firstName= ; Expires = Thu, 01 Jan 2025 00:00:00 GMT"; //TODO: change this to abetter format
 	window.location.href = "signup.html";
 }
 
