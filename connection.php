@@ -15,7 +15,7 @@
     // SQL to create users table
     $usersql = "CREATE TABLE IF NOT EXISTS users (
         id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        username VARCHAR(255) NOT NULL,
+        username VARCHAR(255) UNIQUE,
         password VARCHAR(255) NOT NULL,
         email VARCHAR(100) UNIQUE,
         reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
