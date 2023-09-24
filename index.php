@@ -1,3 +1,11 @@
+<?php
+    require 'connection.php';
+
+    
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +14,7 @@
     <title>Starfinder</title>
 </head>
 <body>
-    <div>Hello, Poopy Pants</div>
+    <h1>Welcome to my website</h1>
+
 </body>
 </html>
