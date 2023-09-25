@@ -1,48 +1,48 @@
 <?php
 
-// Include the database connection file
-require 'connection.php';
+    // Include the database connection file
+    require 'connection.php';
 
-// Check if user requested to sign out
-if (isset($_GET['signout']) && $_GET['signout'] == 'true') {
-    // Clear session variables
-    $_SESSION = array();
-    // Destroy the session
-    session_destroy();
-    // Redirect user to index.php
-    header('Location: index.php');
-    exit;
-}
+    // Check if user requested to sign out
+    if (isset($_GET['signout']) && $_GET['signout'] == 'true') {
+        // Clear session variables
+        $_SESSION = array();
+        // Destroy the session
+        session_destroy();
+        // Redirect user to index.php
+        header('Location: index.php');
+        exit;
+    }
 
-// Start the session
-session_start();
+    // Start the session
+    session_start();
 
-// If name and email are set in the POST request, this block will run
-if(isset($_POST['name']) && isset($_POST['email'])) {
+    // If name and email are set in the POST request, this block will run
+    if(isset($_POST['name']) && isset($_POST['email'])) {
+        $user_id = $_SESSION['user_id'];
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        // Prepare the SQL statement to insert the new contact
+        $stmt = $conn->prepare("INSERT INTO contacts (username, email, userID) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $name, $email, $user_id);
+        $stmt->execute();
+        $stmt->close();
+        // Redirect to contacts.php after insertion
+        header('Location: contacts.php');
+        exit;
+    }
+
+    // Fetch contacts of the user
     $user_id = $_SESSION['user_id'];
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    // Prepare the SQL statement to insert the new contact
-    $stmt = $conn->prepare("INSERT INTO contacts (username, email, userID) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $name, $email, $user_id);
-    $stmt->execute();
-    $stmt->close();
-    // Redirect to contacts.php after insertion
-    header('Location: contacts.php');
-    exit;
-}
+    $result = $conn->query("SELECT * FROM contacts WHERE userID = '$user_id'");
 
-// Fetch contacts of the user
-$user_id = $_SESSION['user_id'];
-$result = $conn->query("SELECT * FROM contacts WHERE userID = '$user_id'");
-
-// If a contact id is set in the GET request, delete the corresponding contact
-if(isset($_GET['id'])) {
-    $contact_id = $_GET['id'];
-    $conn->query("DELETE FROM contacts WHERE id = '$contact_id'");
-    header('Location: contacts.php');
-    exit;
-}
+    // If a contact id is set in the GET request, delete the corresponding contact
+    if(isset($_GET['id'])) {
+        $contact_id = $_GET['id'];
+        $conn->query("DELETE FROM contacts WHERE id = '$contact_id'");
+        header('Location: contacts.php');
+        exit;
+    }
 ?>
 
 <!DOCTYPE html>
