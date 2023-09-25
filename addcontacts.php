@@ -27,18 +27,18 @@
         $name = $_POST['name'];
         $email = $_POST['email'];
 
-        // Check if email already exists in the database
-        $checkEmail = "SELECT * FROM contacts WHERE email = ?";
-        $stmt = $conn->prepare($checkEmail);
-        $stmt->bind_param("s", $email);
+        // Check if the combination of email and userID already exists in the database
+        $checkEmailAndUserID = "SELECT * FROM contacts WHERE email = ? AND userID = ?";
+        $stmt = $conn->prepare($checkEmailAndUserID);
+        $stmt->bind_param("ss", $email, $user_id);
         $stmt->execute();
         $result = $stmt->get_result();
 
         $stmt->close(); // Close statement after executing
 
         if($result->num_rows > 0) {
-            // If the email exists, set an error message
-            $error_message = "Email already exists!";
+            // If the combination of email and userID exists, set an error message
+            $error_message = "Email already associated with this user!";
         } else {
             // Prepare an SQL statement to insert the new contact into the database
             $stmt = $conn->prepare("INSERT INTO contacts (username, email, userID) VALUES (?, ?, ?)");
