@@ -1,75 +1,131 @@
 <?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    header('Content-Type: application/json'); // Set content type to JSON
+    
+    $response = array(); // Array to store the response
+
     // Include the database connection file
     require 'connection.php';
 
-    // Initialize the error message to an empty string
-    $error_message = "";
-
     // Check if the database connection is established properly
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error); // End the script if there's a connection error
+        $response["status"] = "error";
+        $response["message"] = "Connection failed: " . $conn->connect_error;
+        echo json_encode($response);
+        exit;
     }
 
-    // Check if the request method is POST, which implies that the form has been submitted
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Escaping the strings to prevent SQL injection
-        $username = mysqli_real_escape_string($conn, $_POST['username']);
-        $password = mysqli_real_escape_string($conn, $_POST['password']);
-        $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $rawData = file_get_contents("php://input");
+    $data = json_decode($rawData, true);
 
-        // SQL query to check if the entered username already exists in the database
+    // Check for JSON errors
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        $response["status"] = "error";
+        $response["message"] = "Invalid JSON data received.";
+        echo json_encode($response);
+        exit;
+    }
+
+    if(isset($data['username']) && isset($data['password']) && isset($data['email']) && isset($data['phone'])) {
+        $username = mysqli_real_escape_string($conn, $data['username']);
+        $password = mysqli_real_escape_string($conn, $data['password']);
+        $email = mysqli_real_escape_string($conn, $data['email']);
+        $phone = mysqli_real_escape_string($conn, $data['phone']);
+
+        // SQL query to check if the entered username already exists
         $checkUsername = "SELECT * FROM users WHERE username = '$username'";
         $result = mysqli_query($conn, $checkUsername);
 
-        // Check if the number of rows (matching users) is greater than 0
         if(mysqli_num_rows($result) > 0) {
-            // If the username already exists, set the error message
-            $error_message = "Username already exists!";
+            $response["status"] = "error";
+            $response["message"] = "Username already exists!";
         } else {
-            // If the username is unique, prepare the SQL query to insert the new user
-            $sql = "INSERT INTO users (username, password, email) VALUES ('$username','$password','$email')";
-
-            // Execute the insertion query
+            $sql = "INSERT INTO users (username, password, email, phone) VALUES ('$username','$password','$email','$phone')";
             if(mysqli_query($conn, $sql)) {
-                // If registration is successful, redirect the user to index.php
-                header('Location: index.php');
-                exit;
+                $response["status"] = "success";
+                $response["message"] = "User registered successfully!";
             } else {
-                // If there's an error during registration, set the error message
-                $error_message = "Error registering user!";
+                $response["status"] = "error";
+                $response["message"] = "Error registering user!";
             }
         }
+        echo json_encode($response);
+        exit;
+    } else {
+        $response["status"] = "error";
+        $response["message"] = "Required fields missing!";
+        echo json_encode($response);
+        exit;
     }
-
-    // Close the database connection
-    $conn->close();
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <script>
+        async function submitForm(event) {
+            event.preventDefault();
+
+            // Capture the form data
+            let formData = {
+                username: document.getElementById("username").value,
+                password: document.getElementById("password").value,
+                email: document.getElementById("email").value,
+                phone: document.getElementById("phone").value
+            };
+
+            // Send the data as JSON to signup.php
+            try {
+                let response = await fetch('signup.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                let data = await response.json();
+
+                if (data.status === 'error') {
+                    document.getElementById("error_message").innerText = data.message;
+                }else{
+                    window.location.href = "index.php";  // Redirect to login page
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+    </script>
 </head>
+
 <body>
-    <!-- If there's an error message, display it in red -->
-    <?php if($error_message): ?>
-        <p style="color:red;"><?php echo $error_message; ?></p>
-    <?php endif; ?>
+    <!-- Error message display area -->
+    <p id="error_message" style="color:red;"></p>
 
     <!-- Registration form -->
-    <form action="signup.php" method="post">
+    <form onsubmit="submitForm(event)">
         <label for="username">Username:</label>
-        <input type="text" name="username" required><br><br>
-        
+        <input type="text" id="username" name="username" required><br><br>
+
         <label for="password">Password:</label>
-        <input type="password" name="password" required><br><br>
-        
+        <input type="password" id="password" name="password" required><br><br>
+
         <label for="email">Email:</label>
-        <input type="email" name="email" required><br><br>
-        
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="phone">Phone Number:</label>
+        <input type="text" id="phone" name="phone" required><br><br>
+
         <input type="submit" value="Register">
     </form>
+
+    <a href="index.php" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #007BFF; color: #FFF; text-decoration: none; border-radius: 5px;">Go Back</a>
+
 </body>
+
 </html>

@@ -1,49 +1,115 @@
 <?php
-
     // Include the database connection file
     require 'connection.php';
-
-    // Check if user requested to sign out
-    if (isset($_GET['signout']) && $_GET['signout'] == 'true') {
-        // Clear session variables
-        $_SESSION = array();
-        // Destroy the session
-        session_destroy();
-        // Redirect user to index.php
-        header('Location: index.php');
-        exit;
-    }
 
     // Start the session
     session_start();
 
-    // If name and email are set in the POST request, this block will run
-    if(isset($_POST['name']) && isset($_POST['email'])) {
-        $user_id = $_SESSION['user_id'];
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        // Prepare the SQL statement to insert the new contact
-        $stmt = $conn->prepare("INSERT INTO contacts (username, email, userID) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $name, $email, $user_id);
-        $stmt->execute();
-        $stmt->close();
-        // Redirect to contacts.php after insertion
-        header('Location: contacts.php');
+    // Check for sign out request
+    if (isset($_GET['signout']) && $_GET['signout'] == 'true') {
+        session_destroy(); // Destroy the session
+        header('Location: index.php'); // Redirect to index.php
+        exit; // Stop further execution
+    }
+
+    if (isset($_POST['id'])) {
+        $contactId = $_POST['id'];
+        
+        // Use a prepared statement to avoid SQL injection
+        $stmt = $conn->prepare("DELETE FROM contacts WHERE id = ?");
+        $stmt->bind_param("i", $contactId);
+        
+        $success = $stmt->execute();
+        
+        header('Content-Type: application/json');
+        echo json_encode(['success' => $success]);
         exit;
     }
 
-    // Fetch contacts of the user
-    $user_id = $_SESSION['user_id'];
-    $result = $conn->query("SELECT * FROM contacts WHERE userID = '$user_id'");
+    $contacts = []; // Empty array to store contacts
 
-    // If a contact id is set in the GET request, delete the corresponding contact
-    if(isset($_GET['id'])) {
-        $contact_id = $_GET['id'];
-        $conn->query("DELETE FROM contacts WHERE id = '$contact_id'");
-        header('Location: contacts.php');
+    // If a user is logged in
+    if (isset($_SESSION['user_id'])) {
+        $user_id = $_SESSION['user_id'];
+
+        // Fetch contacts of the user
+        $result = $conn->query("SELECT * FROM contacts WHERE userID = '$user_id'");
+
+        while ($row = $result->fetch_assoc()) {
+            $contacts[] = [
+                'id' => $row['id'],
+                'name' => $row['username'],
+                'email' => $row['email'],
+                'phone' => $row['phone']
+            ];
+        }
+    }
+
+    // If it's an AJAX request, return the JSON
+    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        header('Content-Type: application/json');
+        echo json_encode($contacts);
         exit;
     }
 ?>
+
+<script>
+    // Fetch the contacts using AJAX
+    fetch('contacts.php', {
+        headers: {
+            "X-Requested-With": "XMLHttpRequest" // This header tells PHP it's an AJAX request
+        }
+    })
+    .then(response => response.json())
+    .then(contacts => {
+        // Get the table body
+        let tbody = document.querySelector('.contact-table tbody');
+        
+        // Loop through the contacts and append to the table
+        contacts.forEach(contact => {
+    let tr = document.createElement('tr');
+    tr.innerHTML = `
+        <tr>
+        <td>${contact.name}</td>
+        <td>${contact.email}</td>
+        <td>${contact.phone}</td>
+        <td><button class="viewButton"><img src="images/magGlass.png" class="magGlass"></button></td>
+        <td><button class="viewButton"><img src="images/pencil1.png" class="magGlass"></button></td>
+        <td><button class="deleteButton" data-id="${contact.id}"><img src="images/trash.gif" class="magGlass"></button></td>
+        </tr>
+    `;
+    tbody.appendChild(tr);
+});
+
+    });
+
+    document.addEventListener('click', function(event) {
+    if (event.target.closest('.deleteButton')) {
+        const contactId = event.target.closest('.deleteButton').getAttribute('data-id');
+        
+        fetch('contacts.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'id=' + contactId
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Remove the row from the table
+                event.target.closest('tr').remove();
+                alert('Contact deleted successfully!');
+            } else {
+                alert('Failed to delete the contact.');
+            }
+        });
+    }
+});
+
+</script>
+
+
 
 <!DOCTYPE html>
 <html>
@@ -73,35 +139,17 @@
         <a href="addcontacts.php" style="left:10px; top: 5px;" class="glow-on-hover">Add New Contact</a>
         <!-- Table for displaying contacts -->
         <div class="box">
-            <table class="contact-table">
-                <!-- Table header -->
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>View</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                </tr>
+        <table class="contact-table">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>View</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
 
-                <?php
-                // Fetch and display contacts in table rows
-
-                $user_id = $_SESSION['user_id'];
-                $result = $conn->query("SELECT * FROM contacts WHERE userID = '$user_id'");
-
-                while($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . htmlspecialchars($row['username']) . "</td>";  // Display the name
-                    echo "<td>" . htmlspecialchars($row['email']) . "</td>";    // Display the email
-                    echo "<td><button class='viewButton'><img src='images/magGlass.png' class='magGlass'></button></td>";
-                    echo "<td><button class='viewButton'><img src='images/pencil1.png' class='magGlass'></button></td>";
-                    // Link for deleting the contact
-                    echo "<td><a href='contacts.php?id=" . $row['id'] . "'><button class='viewButton'><img src='images/trash.gif' class='magGlass'></button></a></td>";
-                    echo "</tr>";
-                }
-                ?>
-
-            </table>
+        </table>
         </div>
     </div>
 </body>

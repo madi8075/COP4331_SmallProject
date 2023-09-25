@@ -18,7 +18,8 @@
         username VARCHAR(255) UNIQUE,
         password VARCHAR(255) NOT NULL,
         email VARCHAR(100) UNIQUE,
-        reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        phone VARCHAR(15) NOT NULL
     )";
 
     // Check connection
@@ -33,7 +34,8 @@
         email VARCHAR(100) NOT NULL,
         userID INT(6) UNSIGNED NOT NULL,
         reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        FOREIGN KEY (userID) REFERENCES users(id)
+        FOREIGN KEY (userID) REFERENCES users(id),
+        phone VARCHAR(15) NOT NULL
     )";
 
     // Check connection
