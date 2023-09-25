@@ -48,9 +48,11 @@ $contacts = []; // Empty array to store contacts
             'id' => $row['id'],
             'name' => $row['username'],
             'email' => $row['email'],
-            'phone' => $row['phone']
+            'phone' => $row['phone'],
+            'date' => $row['reg_date'] // Fetching the reg_date from the result
         ];
     }
+    
 }
 
     // If it's an AJAX request, return the JSON
@@ -93,12 +95,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     <td>${contact.name}</td>
                     <td>${contact.email}</td>
                     <td>${contact.phone}</td>
+                    <td>${contact.date}</td> <!-- Displaying the date -->
                     <td><button class="viewButton"><img src="images/magGlass.png" class="magGlass"></button></td>
                     <td><button class="viewButton"><img src="images/pencil1.png" class="magGlass"></button></td>
                     <td><button class="deleteButton" data-id="${contact.id}"><img src="images/trash.gif" class="magGlass"></button></td>
                 `;
                 tbody.appendChild(tr);
             });
+
         });
     }
 
@@ -170,11 +174,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
+                    <th>Date</th> <!-- Header for the Date column -->
                     <th>View</th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
-
             </table>
             </div>
         </div>
