@@ -63,7 +63,7 @@ function doLogin(){
 }
 
 //TODO: fix doSignup()
-/*
+
 function doSignup(){
 	let signupFirstName = document.getElementById("firstName").value;
 	let signupLastName = document.getElementById("lastName").value;
@@ -115,7 +115,7 @@ function doSignup(){
 	} catch (err){
 		document.getElementById("signupResult").innerHTML = err.message;
 	}
-}*/
+}
 
 function saveCookie(){
 	let minutes = 20;

@@ -6,12 +6,6 @@ TODO: try using a Contact object instead of passing around the json
     //grabbing the information for our contact
     $inData = getRequestInfo();
 
-    $userID = $inData["userID"];
-    $firstName = $inData["firstName"];
-    $lastName = $inData["lastName"];
-    $email = $inData["email"];
-    $phone = $inData["phone"];
-
     //try to connect to our database
     $conn = new mysqli("localhost", "root", " ", "StarfinderDB");
 	if ($conn->connect_error) {
@@ -19,7 +13,7 @@ TODO: try using a Contact object instead of passing around the json
 	} 
 	else { //insert new contact
 		$stmt = $conn->prepare("INSERT into Contacts (FirstName,LastName,Email,Phone,UserID) VALUES(?,?,?,?,?)");
-		$stmt->bind_param("sssss",$firstName, $lastName, $email, $phone, $userID);
+		$stmt->bind_param("sssss",$inData["FirstName"], $inData["LastName"],$inData["Email"], $inData["Phone"], $inData["UserID"]);
 		$stmt->execute();
 		$stmt->close();
 		$conn->close();
