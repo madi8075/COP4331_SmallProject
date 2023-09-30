@@ -119,20 +119,42 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Listen for clicks on the page
     document.addEventListener('click', function(event) {
-        // If the clicked element is a delete button, handle the delete operation
+        // Listen for clicks on the page
+    document.addEventListener('click', function(event) {
+        // Check if the clicked element, or its ancestors, has the 'deleteButton' class
         if (event.target.closest('.deleteButton')) {
-            // ... [This part remains unchanged]
-        }
+                // Fetch the data-id attribute value of the closest element with the 'deleteButton' class
+                // This is likely the ID of the contact we want to delete
+                const contactId = event.target.closest('.deleteButton').getAttribute('data-id');
+                
+                // Send a request to 'contacts.php' to delete the contact
+                fetch('contacts.php', {
+                    method: 'POST', // Specify that this is a POST request
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded', // Set content type header
+                    },
+                    body: 'id=' + contactId // Include the contact ID in the request body
+                })
+                .then(response => response.json()) // Convert the server response to a JSON object
+                .then(data => {
+                    // Check the 'success' value in the server response
+                    if (data.success) {
+                        // If the contact was successfully deleted, remove its row from the table
+                        event.target.closest('tr').remove();
+                        // Notify the user of the success
+                        alert('Contact deleted successfully!');
+                    } else {
+                        // If there was an error, notify the user
+                        alert('Failed to delete the contact.');
+                    }
+                });
+            }
+        });
     });
-
     // Fetch contacts when the page first loads
     fetchContacts();
 });
 </script>
-
-
-
-
 
 <!DOCTYPE html>
 <html>
@@ -162,13 +184,13 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="main">
             <!-- Sign out link -->
             <a href="contacts.php?signout=true" class="glow-on-hover" style="right: 10px; top: 5px;">Sign Out</a>
-            <a href="addcontacts.php" class="glow-on-hover" style="right: 10px; top: 5px;">Add New Contact</a>
+            <a href="addcontacts.php" class="glow-on-hover" style="right: 400px; top: 5px;">Add New Contact</a>
             <!-- Contacts title -->
             <h1 class="floating glowing title">Contacts</h1>
             <!-- Add new contact link -->
             
             <!-- Table for displaying contacts -->
-            <div class="contact-table box">
+            <div class="box">
             <table class="contact-table">
                 <tr>
                     <th>Name</th>
