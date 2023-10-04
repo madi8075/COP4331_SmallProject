@@ -61,71 +61,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Register</title>
+        <script>
+            async function submitForm(event) {
+                event.preventDefault();
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <script>
-        async function submitForm(event) {
-            event.preventDefault();
+                // Capture the form data
+                let formData = {
+                    username: document.getElementById("username").value,
+                    password: document.getElementById("password").value,
+                    email: document.getElementById("email").value,
+                    phone: document.getElementById("phone").value
+                };
 
-            // Capture the form data
-            let formData = {
-                username: document.getElementById("username").value,
-                password: document.getElementById("password").value,
-                email: document.getElementById("email").value,
-                phone: document.getElementById("phone").value
-            };
+                // Send the data as JSON to signup.php
+                try {
+                    let response = await fetch('signup.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
 
-            // Send the data as JSON to signup.php
-            try {
-                let response = await fetch('signup.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
-                });
+                    let data = await response.json();
 
-                let data = await response.json();
-
-                if (data.status === 'error') {
-                    document.getElementById("error_message").innerText = data.message;
-                }else{
-                    window.location.href = "index.php";  // Redirect to login page
+                    if (data.status === 'error') {
+                        document.getElementById("error_message").innerText = data.message;
+                    }else{
+                        window.location.href = "index.php";  // Redirect to login page
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
                 }
-            } catch (error) {
-                console.error("Error:", error);
             }
-        }
-    </script>
-</head>
+        </script>
+       
+    </head>
 
-<body>
-    <!-- Error message display area -->
-    <p id="error_message" style="color:red;"></p>
+    <body>
+        <!-- Error message display area -->
+        <p id="error_message" style="color:red;"></p>
 
-    <!-- Registration form -->
-    <form onsubmit="submitForm(event)">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br><br>
+        <!-- Registration form -->
+        <form onsubmit="submitForm(event)">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br><br>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br><br>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br><br>
 
-        <label for="phone">Phone Number:</label>
-        <input type="text" id="phone" name="phone" required><br><br>
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" name="phone" required><br><br>
 
-        <input type="submit" value="Register">
-    </form>
+            <input type="submit" value="Register">
+        </form>
 
-    <a href="index.php" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #007BFF; color: #FFF; text-decoration: none; border-radius: 5px;">Go Back</a>
-
-</body>
-
+        <a href="index.php" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #007BFF; color: #FFF; text-decoration: none; border-radius: 5px;">Go Back</a>
+    </body>
 </html>

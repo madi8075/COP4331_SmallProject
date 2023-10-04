@@ -74,15 +74,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SERVER["CONTENT_TYPE"]) && 
             }
         }
     </script>
+    <link rel="stylesheet" href="loginStyles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <!-- login form -->
-    <form onsubmit="submitForm(event)">
-        Username: <input type="text" name="username" required><br>
-        Password: <input type="password" name="password" required><br>
-        <input type="submit" value="Login">
-    </form>
+    <!-- login form section -->
+    <section>
+        <div class="login-container">
+            <h2>Starfinder</h2>
 
-    <a href="signup.php" class="button">Signup</a>
+            <form onsubmit="submitForm(event)">
+                Username: 
+                <div class="input-box">
+                    <span class="icon">
+                        <i class="fa-solid fa-envelope"></i>
+                    </span>
+                    <input required type="text" name="username" id="username">
+                </div>
+
+                Password: 
+                <div class="input-box">
+                    <span class="icon">
+                        <i class="fa-solid fa-lock"></i>
+                    </span>
+                    <input required type="password" name="password" id="password">
+                </div>
+                <button type="submit">Login</button>
+            </form>
+
+            <div class="create-account">
+                <a href="signup.php">Sign Up</a>
+            </div>
+        </div>
+    </section>
 </body>
 </html>

@@ -103,6 +103,27 @@
             });
         });
     </script>
+    <style>
+            body {
+                margin: 0;
+                height: 100vh; /* make the body take the full viewport height */
+                display: flex;
+                justify-content: center; /* center horizontally */
+                align-items: center; /* center vertically */
+                flex-direction: column; /* stack children vertically */
+            }
+
+            form {
+                display: flex;
+                flex-direction: column;
+                gap: 10px; /* space between form elements */
+                width: 300px; /* or whatever width you prefer */
+            }
+
+            a {
+                margin-top: 20px;
+            }
+    </style>
 </head>
 
 <body>
