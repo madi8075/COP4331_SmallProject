@@ -96,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     <td>${contact.email}</td>
                     <td>${contact.phone}</td>
                     <td>${contact.date}</td> <!-- Displaying the date -->
-                    <td><button class="viewButton"><img src="images/magGlass.png" class="magGlass"></button></td>
                     <td><button class="viewButton"><img src="images/pencil1.png" class="magGlass"></button></td>
                     <td><button class="deleteButton" data-id="${contact.id}"><img src="images/trash.gif" class="magGlass"></button></td>
                 `;
@@ -171,21 +170,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <body>
         <!-- Search Form -->
-        <form id="searchForm" style="left:300px; top: 5px;">
-        <input type="text" name="search" id="searchInput" placeholder="Search by username">
-            <input type="submit" value="Search">
-        </form>
 
         <!-- Background video -->
         <video autoplay muted loop plays-inline class="background-video">
             <source src="images/nebula.mp4" type="video/mp4">
         </video>
 
-        <div class="main">
-            <!-- Sign out link -->
-            <a href="contacts.php?signout=true" class="glow-on-hover" style="right: 10px; top: 5px;">Sign Out</a>
-            <a href="addcontacts.php" class="glow-on-hover" style="right: 400px; top: 5px;">Add New Contact</a>
+        <!-- Sign out link -->
+        <button style="right: 0.5%; top: 1%;"class="glow-on-hover">
+            <a href="contacts.php?signout=true" >Sign Out</a>
+        </button>
+
+        <button style="right: 15%; top: 1%;"class="glow-on-hover">
+            <a href="addcontacts.php" >Add New Contact</a>
+        </button>
+        
+        <form id="searchForm" style="position: absolute;left:1%; top: 5px;width:240px;">
+        <input type="text" name="search" id="searchInput" placeholder="Search by name">
+            <input type="submit" value="Search">
+        </form>
             <!-- Contacts title -->
+            <div class="main">
             <h1 class="floating glowing title">Contacts</h1>
             <!-- Add new contact link -->
             
