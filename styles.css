@@ -175,6 +175,8 @@ td {
     opacity: 0;
     transition: opacity .3s ease-in-out;
     border-radius: 10px;
+    white-space: nowrap; /* Prevent text from wrapping */
+    padding: 10px 20px; /* Adjust padding */
 }
 
 .glow-on-hover:active {
