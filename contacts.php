@@ -237,12 +237,12 @@ document.addEventListener('DOMContentLoaded', function() {
         </video>
 
         <!-- Sign out link -->
-        <button style="right: 0.5%; top: 1%;"class="glow-on-hover">
-            <a href="contacts.php?signout=true" >Sign Out</a>
+        <button style="right: 0.5%; top: 1%;"class="glow-on-hover" onclick="window.location.href = 'index.php';">
+            Sign Out
         </button>
 
-        <button style="right: 15%; top: 1%;"class="glow-on-hover">
-            <a href="addcontacts.php" >Add New Contact</a>
+        <button style="right: 15%; top: 1%;"class="glow-on-hover" onclick="window.location.href = 'addcontacts.php';">
+            Add New Contact
         </button>
         
         

@@ -100,30 +100,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         </script>
-       
+        <link rel="stylesheet" href="loginStyles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
 
     <body>
-        <!-- Error message display area -->
-        <p id="error_message" style="color:red;"></p>
+    <!-- registration form section -->
+    <section>
+        <div class="registration-container">
+            <h2>Starfinder Registration</h2>
 
-        <!-- Registration form -->
-        <form onsubmit="submitForm(event)">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required><br><br>
+            <!-- Error message display area -->
+            <p id="error_message" style="color:red;"></p>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required><br><br>
+            <form onsubmit="submitForm(event)">
+                Username: 
+                <div class="input-box">
+                    <span class="icon">
+                        <i class="fa-solid fa-user"></i>
+                    </span>
+                    <input required type="text" name="username" id="username">
+                </div>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required><br><br>
+                Password: 
+                <div class="input-box">
+                    <span class="icon">
+                        <i class="fa-solid fa-lock"></i>
+                    </span>
+                    <input required type="password" name="password" id="password">
+                </div>
 
-            <label for="phone">Phone Number:</label>
-            <input type="text" id="phone" name="phone" required><br><br>
+                Email: 
+                <div class="input-box">
+                    <span class="icon">
+                        <i class="fa-solid fa-envelope"></i>
+                    </span>
+                    <input required type="email" name="email" id="email">
+                </div>
 
-            <input type="submit" value="Register">
-        </form>
+                Phone Number: 
+                <div class="input-box">
+                    <span class="icon">
+                        <i class="fa-solid fa-phone"></i>
+                    </span>
+                    <input required type="text" name="phone" id="phone">
+                </div>
 
-        <a href="index.php" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #007BFF; color: #FFF; text-decoration: none; border-radius: 5px;">Go Back</a>
-    </body>
+                <button type="submit">Register</button>
+            </form>
+
+            <div class="create-account">
+            <button onclick="window.location.href = 'index.php';">Back</button>
+            </div>
+        </div>
+    </section>
+</body>
 </html>
