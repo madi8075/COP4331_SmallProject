@@ -213,6 +213,7 @@
         }
     </style>
     <link rel="stylesheet" href="addContactsStyles.css">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
 </head>
 
 <body>
