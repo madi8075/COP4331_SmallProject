@@ -468,11 +468,11 @@ document.addEventListener('DOMContentLoaded', function() {
         </video>
 
         <!-- Sign out link -->
-        <button style="right: 0.5%; top: 1%;" class="glow-on-hover adaptive-text" onclick="window.location.href = 'index.php';">
+        <button style="right: 0.5%; top: 1%;" class="glow-on-hover" onclick="window.location.href = 'index.php';">
             <span>Sign Out</span>
         </button>
         <!-- Add New Contact -->
-        <button style="right: 15%; top: 1%;" class="glow-on-hover adaptive-text add-contact" onclick="window.location.href = 'addcontacts.php';">
+        <button style="right: 15%; top: 1%;" class="glow-on-hover add-contact" onclick="window.location.href = 'addcontacts.php';">
             <span>Add New Contact</span>
         </button>
         
