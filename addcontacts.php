@@ -102,106 +102,95 @@
                 }
             });
         });
-        window.onload = function(){
-            var canvas = document.getElementById('canvas');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            var ctx = canvas.getContext('2d'),
-                w = canvas.width,
-                h = canvas.height;
+        window.onload = function() {
+            const bgCanvas = document.getElementById('canvas');
+            bgCanvas.width = window.innerWidth;
+            bgCanvas.height = window.innerHeight;
+            const sky = bgCanvas.getContext('2d'),
+                width = bgCanvas.width,
+                height = bgCanvas.height;
 
+            const mainHue = 217,
+                celestialObjects = [],
+                maxObjects = 1400;
 
-            hue = 217,
-            stars = [],
-            count = 0,
-            maxStars = 1400;
-            // Cache gradient
-            var canvas2 = document.createElement('canvas'),
-                ctx2 = canvas2.getContext('2d');
-            canvas2.width = 100;
-            canvas2.height = 100;
-            var half = canvas2.width / 2,
-                gradient2 = ctx2.createRadialGradient(half, half, 0, half, half, half);
-            gradient2.addColorStop(0.025, '#fff');
-            gradient2.addColorStop(0.1, 'hsl(' + hue + ', 61%, 33%)');
-            gradient2.addColorStop(0.25, 'hsl(' + hue + ', 64%, 6%)');
-            gradient2.addColorStop(1, 'transparent');
+            const tempCanvas = document.createElement('canvas'),
+                tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = 100;
+            tempCanvas.height = 100;
+            const middle = tempCanvas.width / 2,
+                radialGradient = tempCtx.createRadialGradient(middle, middle, 0, middle, middle, middle);
+            radialGradient.addColorStop(0.025, '#fff');
+            radialGradient.addColorStop(0.1, 'hsl(' + mainHue + ', 61%, 33%)');
+            radialGradient.addColorStop(0.25, 'hsl(' + mainHue + ', 64%, 6%)');
+            radialGradient.addColorStop(1, 'transparent');
 
-            ctx2.fillStyle = gradient2;
-            ctx2.beginPath();
-            ctx2.arc(half, half, half, 0, Math.PI * 2);
-            ctx2.fill();
+            tempCtx.fillStyle = radialGradient;
+            tempCtx.beginPath();
+            tempCtx.arc(middle, middle, middle, 0, Math.PI * 2);
+            tempCtx.fill();
 
-            function random(min, max) {
+            function randomValue(min, max) {
                 if (arguments.length < 2) {
                     max = min;
                     min = 0;
                 }
-
-                if (min > max) {
-                    var hold = max;
-                    max = min;
-                    min = hold;
-                }
-
                 return Math.floor(Math.random() * (max - min + 1)) + min;
             }
 
-            function maxOrbit(x, y) {
-                var max = Math.max(x, y),
-                    diameter = Math.round(Math.sqrt(max * max + max * max));
-                return diameter / 2;
+            function calculateOrbit(x, y) {
+                return Math.round(Math.sqrt(x * x + y * y)) / 2;
             }
 
-            var Star = function() {
+            class Celestial {
+                constructor() {
+                    this.orbit = randomValue(calculateOrbit(width, height));
+                    this.size = randomValue(60, this.orbit) / 12;
+                    this.centerX = width / 2;
+                    this.centerY = height / 2;
+                    this.passedTime = randomValue(0, maxObjects);
+                    this.movementSpeed = randomValue(this.orbit) / 50000;
+                    this.transparency = randomValue(2, 10) / 10;
 
-                this.orbitRadius = random(maxOrbit(w, h));
-                this.radius = random(60, this.orbitRadius) / 12;
-                this.orbitX = w / 2;
-                this.orbitY = h / 2;
-                this.timePassed = random(0, maxStars);
-                this.speed = random(this.orbitRadius) / 50000;
-                this.alpha = random(2, 10) / 10;
-
-                count++;
-                stars[count] = this;
-            }
-
-            Star.prototype.draw = function() {
-                var x = Math.sin(this.timePassed) * this.orbitRadius + this.orbitX,
-                    y = Math.cos(this.timePassed) * this.orbitRadius + this.orbitY,
-                    twinkle = random(10);
-
-                if (twinkle === 1 && this.alpha > 0) {
-                    this.alpha -= 0.05;
-                } else if (twinkle === 2 && this.alpha < 1) {
-                    this.alpha += 0.05;
+                    celestialObjects.push(this);
                 }
 
-                ctx.globalAlpha = this.alpha;
-                ctx.drawImage(canvas2, x - this.radius / 2, y - this.radius / 2, this.radius, this.radius);
-                this.timePassed += this.speed;
+                render() {
+                    const posX = Math.sin(this.passedTime) * this.orbit + this.centerX,
+                        posY = Math.cos(this.passedTime) * this.orbit + this.centerY;
+                    const sparkle = randomValue(10);
+
+                    if (sparkle === 1 && this.transparency > 0) {
+                        this.transparency -= 0.05;
+                    } else if (sparkle === 2 && this.transparency < 1) {
+                        this.transparency += 0.05;
+                    }
+
+                    sky.globalAlpha = this.transparency;
+                    sky.drawImage(tempCanvas, posX - this.size / 2, posY - this.size / 2, this.size, this.size);
+                    this.passedTime += this.movementSpeed;
+                }
             }
 
-            for (var i = 0; i < maxStars; i++) {
-                new Star();
+            for (let i = 0; i < maxObjects; i++) {
+                new Celestial();
             }
 
-            function animation() {
-                ctx.globalCompositeOperation = 'source-over';
-                ctx.globalAlpha = 0.8;
-                ctx.fillStyle = 'hsla(' + hue + ', 64%, 6%, 1)';
-                ctx.fillRect(0, 0, w, h)
+            function animateSky() {
+                sky.globalCompositeOperation = 'source-over';
+                sky.globalAlpha = 0.8;
+                sky.fillStyle = 'hsla(' + mainHue + ', 64%, 6%, 1)';
+                sky.fillRect(0, 0, width, height);
+                sky.globalCompositeOperation = 'lighter';
 
-                ctx.globalCompositeOperation = 'lighter';
-                for (var i = 1, l = stars.length; i < l; i++) {
-                    stars[i].draw();
-                };
+                for (const celestial of celestialObjects) {
+                    celestial.render();
+                }
 
-                window.requestAnimationFrame(animation);
+                window.requestAnimationFrame(animateSky);
             }
 
-            animation();
+            animateSky();
         }
     </script>
     <style>
